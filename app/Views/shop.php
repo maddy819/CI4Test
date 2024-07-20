@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <p><?php echo $shopname; ?></p>
+    <p><?php print_r($stripekey); ?></p>
     <div>
         <a href="<?php echo url_to('home') ?>">Home</a>
         <a href="<?php echo url_to('about') ?>">About</a>

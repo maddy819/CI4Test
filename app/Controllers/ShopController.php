@@ -9,11 +9,18 @@ class ShopController extends BaseController
 {
     public $shopname = "Pet Care";
     public $category;
+    public $StripeConfig;
+
+    public function __construct() {
+        $this->appConfig = config('app');
+        $this->StripeConfig = config('stripe');
+    }
 
     public function index()
     {
         //$data = array();
         $data['shopname'] = $this->shopname;
+        $data['stripekey'] = $this->StripeConfig->KEY;
         return view("shop", $data);
     }
 
