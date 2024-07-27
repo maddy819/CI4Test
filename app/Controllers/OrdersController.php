@@ -12,8 +12,10 @@ class OrdersController extends BaseController
     public $validation;
     public $orders;
     public $data;
+    public $session;
 
     public function __construct() {
+        $this->session = session();
         $this->orders = new Orders;
         $this->validation = \Config\Services::validation();
     }
@@ -32,7 +34,8 @@ class OrdersController extends BaseController
 
         if(!$this->validate($this->orders->validationRules)){
             //return view('orders', ['error' => $this->validation->listErrors()]);
-            return redirect()->to('order')->with("error", $this->validation->listErrors());
+            $this->session->setFlashdata('error', $this->validation->listErrors());
+            return redirect()->back();
         }
 
         $orders = array(
@@ -43,7 +46,8 @@ class OrdersController extends BaseController
 
         if($this->request->getVar('save') == "save_order") {
             if($this->orders->insert($orders)) {
-                return redirect()->to('order')->with("success", "order placed successfully");
+                $this->session->setFlashdata('success', "Order Placed Successfully.");
+                return redirect()->back();
             }
         }
 
@@ -51,7 +55,8 @@ class OrdersController extends BaseController
             $id = $this->request->getVar('id');
 
             if($this->orders->update($id, $orders)) {
-                return redirect()->to('order')->with("success", "order updated successfully");
+                $this->session->setFlashdata('success', "order updated successfully");
+                return redirect()->back();
             }
         }
     }
@@ -64,9 +69,8 @@ class OrdersController extends BaseController
     }
 
     public function deleteOrder($orderId) {
-        $this->data['save'] = "save_order";
         $this->orders->delete($orderId);
-        $this->data['orders'] = $this->orders->find();
-        return view("orders", $this->data);
+        $this->session->setFlashdata('success', "order deleted successfully");
+        return redirect()->back();
     }
 }

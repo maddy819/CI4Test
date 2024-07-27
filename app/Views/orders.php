@@ -15,12 +15,12 @@
     </form>
 
     <?php 
-    if(isset($error)) {
-        print_r($error);
+    if(isset($_SESSION['error'])) {
+        print_r($_SESSION['error']);
     } 
 
-    if(isset($success)) {
-        echo $success;
+    if(isset($_SESSION['success'])) {
+        echo $_SESSION['success'];
     }
     
     ?>
@@ -28,6 +28,7 @@
     <table>
         <thead>
             <th>Id</th>
+            <th>Product Id</th>
             <th>Price</th>
             <th>Quantity</th>
         </thead>
@@ -37,6 +38,7 @@
             foreach($orders as $order) { ?>
             <tr>
                 <td><?php echo $order->id; ?></td>
+                <td><?php echo $order->product_id; ?></td>
                 <td><?php echo $order->price; ?></td>
                 <td><?php echo $order->qty; ?></td>
                 <td>
