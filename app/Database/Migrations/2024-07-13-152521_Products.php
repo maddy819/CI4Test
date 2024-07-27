@@ -51,14 +51,12 @@ class Products extends Migration
     public function up()
     {
         $this->forge->addField($this->fields);
-        $this->forge->addForeignKey('user_id','users','id','NULL','NULL');
         $this->forge->addKey('id', true);
         $this->forge->createTable('products');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('users','user_id');
         $this->forge->dropTable('products');
     }
 }

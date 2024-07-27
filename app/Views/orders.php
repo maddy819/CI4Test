@@ -7,10 +7,11 @@
 </head>
 <body>
     <form method="post" action="<?php echo url_to('orders-save') ?>">
-        Product Id :: <input type="text" name="product_id"><br>
-        Price :: <input type="text" name="price"><br>
-        Quantity :: <input type="text" name="qty"><br>
-        <button type="submit" name="save" value="save_order">Save</button>
+        <input type="hidden" name="id" value="<?php echo isset($order->id) ? $order->id : ""; ?>">
+        Product Id :: <input type="text" name="product_id" value="<?php echo isset($order->product_id) ? $order->product_id : ""; ?>"><br>
+        Price :: <input type="text" name="price" value="<?php echo isset($order->price) ? $order->price : ""; ?>"><br>
+        Quantity :: <input type="text" name="qty" value="<?php echo isset($order->qty) ? $order->qty : ""; ?>"><br>
+        <button type="submit" name="save" value="<?php echo isset($save) ? $save : "save_order" ; ?>">Save</button>
     </form>
 
     <?php 
@@ -23,5 +24,28 @@
     }
     
     ?>
+    <br><br>
+    <table>
+        <thead>
+            <th>Id</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </thead>
+        <tbody>
+            <?php 
+            if(isset($orders)) {
+            foreach($orders as $order) { ?>
+            <tr>
+                <td><?php echo $order->id; ?></td>
+                <td><?php echo $order->price; ?></td>
+                <td><?php echo $order->qty; ?></td>
+                <td>
+                    <a href="<?php echo url_to('orders-edit', $order->id); ?>">Edit</a>
+                    <a href="<?php echo url_to('orders-delete', $order->id); ?>">Delete</a>
+                </td>
+            </tr>
+            <?php }} ?>
+        </tbody>
+    </table>
 </body>
 </html>

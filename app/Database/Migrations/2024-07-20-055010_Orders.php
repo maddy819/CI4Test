@@ -34,14 +34,12 @@ class Orders extends Migration
     public function up()
     {
         $this->forge->addField($this->fields);
-        $this->forge->addForeignKey('product_id','products','id','NULL','NULL');
         $this->forge->addKey('id', true);
         $this->forge->createTable('orders');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('products','product_id');
         $this->forge->dropTable('orders');
     }
 }

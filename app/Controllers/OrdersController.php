@@ -11,6 +11,7 @@ class OrdersController extends BaseController
 {
     public $validation;
     public $orders;
+    public $data;
 
     public function __construct() {
         $this->orders = new Orders;
@@ -19,18 +20,19 @@ class OrdersController extends BaseController
 
     public function index()
     {
-        return view("orders");
+        $this->data['save'] = "save_order";
+        $this->data['orders'] = $user = $this->orders->find();
+        return view("orders", $this->data);
     }
 
     public function saveOrder() {
-        //echo "<pre>";
-        //print_r($this->orders->validationRules);
-        //exit;
+        // echo "<pre>";
+        // print_r($this->orders->validationRules);
+        // exit;
 
         if(!$this->validate($this->orders->validationRules)){
-            return view('orders', [
-				'error' => $this->validation->listErrors()
-			]);
+            //return view('orders', ['error' => $this->validation->listErrors()]);
+            return redirect()->to('order')->with("error", $this->validation->listErrors());
         }
 
         $orders = array(
@@ -41,10 +43,30 @@ class OrdersController extends BaseController
 
         if($this->request->getVar('save') == "save_order") {
             if($this->orders->insert($orders)) {
-                return view('orders', [
-                    'success' => "Order saved successfully"
-                ]);
+                return redirect()->to('order')->with("success", "order placed successfully");
             }
         }
+
+        if($this->request->getVar('save') == "update_order") {
+            $id = $this->request->getVar('id');
+
+            if($this->orders->update($id, $orders)) {
+                return redirect()->to('order')->with("success", "order updated successfully");
+            }
+        }
+    }
+
+    public function editOrder($orderId) {
+        $this->data['save'] = "update_order";
+        $this->data['orders'] = $this->orders->find();
+        $this->data['order'] = $this->orders->find($orderId);
+        return view("orders", $this->data);
+    }
+
+    public function deleteOrder($orderId) {
+        $this->data['save'] = "save_order";
+        $this->orders->delete($orderId);
+        $this->data['orders'] = $this->orders->find();
+        return view("orders", $this->data);
     }
 }
